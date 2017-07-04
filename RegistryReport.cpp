@@ -1,6 +1,3 @@
-// RegistryReport.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 
 HRESULT
@@ -8,7 +5,7 @@ GetRegKey(
 	HKEY	hKey,
 	LPCWSTR wszKeyName,
 	LPCWSTR wszValueName,
-	LPBYTE	wszValue,
+	LPBYTE	pbValue,
 	DWORD	dwType,
 	DWORD	dwBufferSize
 	)
@@ -16,6 +13,10 @@ GetRegKey(
 	HKEY	hValues;
 
 	ChkProlog();
+
+	ChkArg(wszKeyName);
+	ChkArg(wszValueName);
+	ChkArg(pbValue);
 
 	ChkWin32(RegOpenKeyExW(
 		hKey,
@@ -29,7 +30,7 @@ GetRegKey(
 		wszValueName,
 		0,
 		&dwType,
-		wszValue,
+		pbValue,
 		&dwBufferSize)
 	);
 
@@ -42,16 +43,20 @@ GetDWORDRegKey(
 	HKEY	hKey,
 	LPCWSTR	wszKeyName,
 	LPCWSTR	wszValueName,
-	DWORD	*dwValue
+	DWORD	*pdwValue
 	)
 {
 	ChkProlog();
+
+	ChkArg(wszKeyName);
+	ChkArg(wszValueName);
+	ChkArg(pdwValue);
 
 	ChkHr(GetRegKey(
 		hKey,
 		wszKeyName,
 		wszValueName,
-		(LPBYTE)dwValue,
+		(LPBYTE)pdwValue,
 		REG_DWORD,
 		sizeof(DWORD))
 	);
@@ -64,16 +69,20 @@ GetQWORDRegKey(
 	HKEY		hKey,
 	LPCWSTR		wszKeyName,
 	LPCWSTR		wszValueName,
-	ULONGLONG	*qwValue
+	ULONGLONG	*pqwValue
 	)
 {
 	ChkProlog();
+
+	ChkArg(wszKeyName);
+	ChkArg(wszValueName);
+	ChkArg(pqwValue);
 
 	ChkHr(GetRegKey(
 		hKey,
 		wszKeyName, 
 		wszValueName,
-		(LPBYTE)qwValue,
+		(LPBYTE)pqwValue,
 		REG_QWORD,
 		sizeof(ULONGLONG))
 	);
@@ -90,6 +99,10 @@ GetStringRegKey(
 	)
 {
 	ChkProlog();
+
+	ChkArg(wszKeyName);
+	ChkArg(wszValueName);
+	ChkArg(wszValue);
 
 	ChkHr(GetRegKey(
 		hKey, 
@@ -168,6 +181,8 @@ PrintSystemInfo(
 	HRESULT hr;
 
 	ChkProlog();
+
+	ChkArg(fOut);
 
 	fwprintf(fOut, L"----------SYSTEM INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
@@ -277,6 +292,8 @@ PrintOfficeInfo(
 
 	ChkProlog();
 
+	ChkArg(fOut);
+
 	fwprintf(fOut, L"----------OFFICE INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
 	//Office 32bit 2003 product id
@@ -346,6 +363,8 @@ PrintLogonInfo(
 
 	ChkProlog();
 
+	ChkArg(fOut);
+
 	fwprintf(fOut, L"----------LOGON INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
 	//Auto admin logon enabled
@@ -410,6 +429,8 @@ PrintExplorerInfo(
 
 	ChkProlog();
 
+	ChkArg(fOut);
+
 	fwprintf(fOut, L"----------WINDOWS EXPLORER INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
 	//Lock screen slideshow
@@ -462,6 +483,8 @@ PrintVolativeInfo(
 	HRESULT hr;
 
 	ChkProlog();
+
+	ChkArg(fOut);
 
 	fwprintf(fOut, L"----------VOLATILE INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
@@ -521,6 +544,8 @@ PrintTcpipInfo(
 
 	ChkProlog();
 
+	ChkArg(fOut);
+
 	fwprintf(fOut, L"----------TCPIP INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
 	//TCPIP host name
@@ -549,6 +574,8 @@ PrintPaintInfo(
 	HRESULT hr;
 
 	ChkProlog();
+
+	ChkArg(fOut);
 
 	fwprintf(fOut, L"----------PAINT INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
@@ -593,6 +620,8 @@ PrintTimeInfo(
 	HRESULT hr;
 
 	ChkProlog();
+
+	ChkArg(fOut);
 
 	fwprintf(fOut, L"----------TIMEZONE INFORMATION (%s)----------\n", hKey == HKEY_LOCAL_MACHINE ? L"HKLM" : L"HKCU");
 
